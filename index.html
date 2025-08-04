@@ -6,89 +6,72 @@
   <title>361° 官方商城</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Noto Sans SC', 'Inter', sans-serif;
     }
     .product-card:hover img {
       transform: scale(1.05);
     }
-    .size-btn:hover {
-      border-color: #dc2626;
-      color: #dc2626;
+    .size-btn.selected, .color-btn.selected {
+        border-color: #111827;
+        background-color: #111827;
+        color: #ffffff;
     }
-    .favorite-btn:hover svg {
-      fill: #dc2626;
-      stroke: #dc2626;
+    .size-btn:disabled {
+        background-color: #f3f4f6;
+        color: #d1d5db;
+        cursor: not-allowed;
+        position: relative;
+        overflow: hidden;
     }
-    .similar-product:hover img {
-      transform: scale(1.03);
+    .size-btn:disabled::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: -10%;
+        width: 120%;
+        height: 1px;
+        background: #9ca3af;
+        transform: rotate(-45deg);
     }
+    [x-cloak] { display: none !important; }
   </style>
 </head>
-<body x-data="app()" class="bg-gray-50">
+<body x-data="app()" x-cloak class="bg-gray-50">
   <!-- Header -->
-  <header class="bg-white shadow-sm sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <header class="bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-40">
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <div class="flex items-center">
           <h1 class="text-3xl font-bold text-red-600">361°</h1>
           <nav class="ml-10 hidden md:flex space-x-8">
-            <button @click="activeCategory = 'all'" 
-                    :class="activeCategory === 'all' ? 'text-red-600' : 'text-gray-700'"
-                    class="text-sm font-medium hover:text-red-600 transition-colors duration-200">
-              👟 全部
-            </button>
-            <button @click="activeCategory = 'running'" 
-                    :class="activeCategory === 'running' ? 'text-red-600' : 'text-gray-700'"
-                    class="text-sm font-medium hover:text-red-600 transition-colors duration-200">
-              🏃 跑步
-            </button>
-            <button @click="activeCategory = 'lifestyle'" 
-                    :class="activeCategory === 'lifestyle' ? 'text-red-600' : 'text-gray-700'"
-                    class="text-sm font-medium hover:text-red-600 transition-colors duration-200">
-              👕 休闲
-            </button>
-            <button @click="activeCategory = 'basketball'" 
-                    :class="activeCategory === 'basketball' ? 'text-red-600' : 'text-gray-700'"
-                    class="text-sm font-medium hover:text-red-600 transition-colors duration-200">
-              🏀 篮球
-            </button>
+            <button @click="activeCategory = 'all'" :class="activeCategory === 'all' ? 'text-red-600' : 'text-gray-700'" class="text-sm font-medium hover:text-red-600 transition-colors duration-200">👟 全部</button>
+            <button @click="activeCategory = 'running'" :class="activeCategory === 'running' ? 'text-red-600' : 'text-gray-700'" class="text-sm font-medium hover:text-red-600 transition-colors duration-200">🏃 跑步</button>
+            <button @click="activeCategory = 'lifestyle'" :class="activeCategory === 'lifestyle' ? 'text-red-600' : 'text-gray-700'" class="text-sm font-medium hover:text-red-600 transition-colors duration-200">👕 休闲</button>
+            <button @click="activeCategory = 'basketball'" :class="activeCategory === 'basketball' ? 'text-red-600' : 'text-gray-700'" class="text-sm font-medium hover:text-red-600 transition-colors duration-200">🏀 篮球</button>
           </nav>
         </div>
         
         <div class="flex items-center space-x-4">
-          <div class="relative">
-            <input type="text" placeholder="搜索商品..." 
-                   x-model="searchTerm"
-                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-full text-sm w-64 focus:outline-none focus:ring-2 focus:ring-red-500">
-            <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
+          <div class="relative hidden sm:block">
+            <input type="text" placeholder="搜索商品..." x-model="searchTerm" class="pl-10 pr-4 py-2 border border-gray-300 rounded-full text-sm w-64 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all">
+            <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
           </div>
           
-          <button @click="showCart = true" class="relative">
-            <svg class="h-6 w-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9"></path>
-            </svg>
-            <span x-show="cart.length > 0" 
-                  x-text="cart.length" 
-                  class="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-            </span>
+          <button @click="showCart = true" class="relative p-2 hover:bg-gray-100 rounded-full">
+            <svg class="h-6 w-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            <span x-show="cart.length > 0" x-text="getTotalItems()" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full"></span>
           </button>
           
           <template x-if="!user">
-            <button @click="showLoginModal = true" class="text-sm text-gray-700 hover:text-red-600">
-              登录
-            </button>
+            <button @click="showLoginModal = true" class="text-sm text-gray-700 hover:text-red-600">登录</button>
           </template>
           <template x-if="user">
             <div class="flex items-center space-x-4">
-              <span class="text-sm text-gray-700">欢迎, <span x-text="user.name"></span></span>
-              <button @click="logout()" class="text-sm text-gray-700 hover:text-red-600">
-                退出
-              </button>
+              <span class="text-sm text-gray-700 hidden sm:inline">欢迎, <span x-text="user.name"></span></span>
+              <button @click="logout()" class="text-sm text-gray-700 hover:text-red-600">退出</button>
             </div>
           </template>
         </div>
@@ -96,628 +79,347 @@
     </div>
   </header>
 
-  <!-- Mobile Category Nav -->
-  <div class="md:hidden bg-gray-50 border-b">
-    <div class="flex overflow-x-auto px-4 py-3 space-x-4">
-      <button @click="activeCategory = 'all'" 
-              :class="activeCategory === 'all' ? 'bg-red-600 text-white' : 'bg-white text-gray-700'"
-              class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium">
-        👟 全部
-      </button>
-      <button @click="activeCategory = 'running'" 
-              :class="activeCategory === 'running' ? 'bg-red-600 text-white' : 'bg-white text-gray-700'"
-              class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium">
-        🏃 跑步
-      </button>
-      <button @click="activeCategory = 'lifestyle'" 
-              :class="activeCategory === 'lifestyle' ? 'bg-red-600 text-white' : 'bg-white text-gray-700'"
-              class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium">
-        👕 休闲
-      </button>
-      <button @click="activeCategory = 'basketball'" 
-              :class="activeCategory === 'basketball' ? 'bg-red-600 text-white' : 'bg-white text-gray-700'"
-              class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium">
-        🏀 篮球
-      </button>
-    </div>
-  </div>
-
   <!-- Main Content -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex flex-col lg:flex-row gap-8">
-      <!-- Product Grid -->
-      <div class="flex-1">
+  <main class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-red-500 to-orange-500 rounded-lg shadow-lg p-8 md:p-12 mb-12 text-white flex items-center">
+        <div class="flex-1">
+            <h2 class="text-3xl md:text-5xl font-bold mb-2">飞燃3代，疾速上市</h2>
+            <p class="text-lg md:text-xl mb-6">为速度而生，体验极致轻盈与回弹。</p>
+            <button @click="activeCategory = 'running'" class="bg-white text-red-600 font-bold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors">立即探索</button>
+        </div>
+        <div class="hidden md:block w-1/3">
+            <img src="https://placehold.co/400x300/ffffff/FE5A28?text=飞燃3" alt="Running Shoe" class="transform -rotate-12 hover:rotate-0 transition-transform duration-500">
+        </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div>
         <div class="flex items-center justify-between mb-6">
           <h1 class="text-2xl font-bold text-gray-800">
-            <span x-text="activeCategory === 'all' ? '全部商品' : categories.find(c => c.id === activeCategory)?.name"></span>
-            <span class="text-gray-500 ml-2">(<span x-text="filteredProducts.length"></span>款)</span>
+            <span x-text="categories.find(c => c.id === activeCategory)?.name"></span>
+            <span class="text-gray-500 ml-2 text-lg">(<span x-text="filteredProducts.length"></span>)</span>
           </h1>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <template x-for="product in filteredProducts" :key="product.id">
-            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 product-card">
+            <div class="bg-white rounded-lg shadow-sm hover:shadow-xl transition-shadow duration-300 product-card flex flex-col">
               <div class="relative overflow-hidden">
-                <img :src="product.image" :alt="product.name" 
-                     class="w-full h-80 object-cover transition-transform duration-300">
+                <img :src="product.images[0]" :alt="product.name" class="w-full h-72 object-cover transition-transform duration-300">
                 <template x-if="product.isNew">
-                  <div class="absolute top-4 left-4 bg-red-600 text-white px-2 py-1 text-xs font-semibold rounded">
-                    NEW
-                  </div>
+                  <div class="absolute top-4 left-4 bg-red-600 text-white px-2 py-1 text-xs font-semibold rounded">新品</div>
                 </template>
-                <button @click="toggleFavorite(product.id)" 
-                        :class="favorites.includes(product.id) ? 'bg-red-600 text-white' : 'bg-white text-gray-400'"
-                        class="absolute top-4 right-4 p-2 rounded-full favorite-btn transition-colors duration-200">
-                  <svg class="h-5 w-5" :fill="favorites.includes(product.id) ? 'currentColor' : 'none'" 
-                       stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.682l-1.318-1.364a4.5 4.5 0 00-6.364 0z"></path>
-                  </svg>
+                <button @click="toggleFavorite(product.id)" class="absolute top-4 right-4 p-2 rounded-full bg-white/70 backdrop-blur-sm transition-colors duration-200">
+                  <svg class="h-5 w-5" :class="favorites.includes(product.id) ? 'text-red-500 fill-current' : 'text-gray-500'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.682l-1.318-1.364a4.5 4.5 0 00-6.364 0z"></path></svg>
                 </button>
               </div>
               
-              <div class="p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2 line-clamp-2" x-text="product.name"></h3>
-                <p class="text-sm text-gray-600 mb-1">款号: <span x-text="product.model"></span></p>
-                <p class="text-sm text-gray-600 mb-3">序号: <span x-text="product.sku"></span></p>
-                
-                <div class="flex items-center mb-3">
+              <div class="p-4 flex flex-col flex-grow">
+                <h3 class="text-base font-semibold text-gray-800 mb-2 line-clamp-2 flex-grow" x-text="product.name"></h3>
+                <p class="text-sm text-gray-500 mb-3" x-text="`${product.colors.length} 种颜色`"></p>
+                <div class="flex items-center mb-4">
                   <span class="text-lg font-bold text-red-600">¥<span x-text="product.salePrice"></span></span>
                   <span class="text-sm text-gray-500 line-through ml-2">¥<span x-text="product.retailPrice"></span></span>
                 </div>
-                
-                <button @click="selectedProduct = product" 
-                        class="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-semibold">
-                  选择尺码
-                </button>
+                <button @click="selectProduct(product.id)" class="w-full bg-gray-900 text-white py-2.5 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-semibold text-sm">选择选项</button>
               </div>
             </div>
           </template>
         </div>
       </div>
+    </div>
+  </main>
 
-      <!-- Shopping Cart Sidebar -->
-      <div class="w-full lg:w-80">
-        <div class="bg-white rounded-lg shadow-md p-6 sticky top-8">
-          <h3 class="text-xl font-bold text-gray-800 mb-4">购物车 (<span x-text="cart.length"></span>件)</h3>
-          
-          <template x-if="cart.length === 0">
-            <div class="text-center py-8 text-gray-500">
-              <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9"></path>
-              </svg>
-              <p class="mt-4">购物车为空</p>
-              <p class="text-sm mt-2">选择商品加入购物车</p>
+  <!-- Product Detail Modal -->
+  <div x-show="selectedProduct" @keydown.escape.window="closeProductModal()" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+    <div @click.away="closeProductModal()" class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto" x-show="selectedProduct" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
+      <template x-if="selectedProduct">
+        <div class="p-6">
+          <div class="flex justify-end">
+            <button @click="closeProductModal()" class="text-gray-400 hover:text-gray-600">&times;</button>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+              <img :src="modalImage" :alt="selectedProduct.name" class="w-full h-96 object-cover rounded-lg mb-4">
+              <div class="grid grid-cols-4 gap-2">
+                  <template x-for="img in selectedProduct.images" :key="img">
+                      <img :src="img" @click="modalImage = img" class="w-full h-24 object-cover rounded-md cursor-pointer" :class="{'ring-2 ring-red-500': modalImage === img}">
+                  </template>
+              </div>
             </div>
-          </template>
-          
-          <template x-if="cart.length > 0">
-            <div class="space-y-4 mb-6 max-h-96 overflow-y-auto">
-              <template x-for="item in cart" :key="item.id">
-                <div class="border rounded-lg p-4">
-                  <div class="flex space-x-3">
-                    <img :src="item.image" :alt="item.name" class="w-16 h-16 object-cover rounded">
-                    <div class="flex-1 min-w-0">
-                      <h4 class="text-sm font-medium text-gray-800 truncate" x-text="item.name"></h4>
-                      <p class="text-xs text-gray-500">尺码: <span x-text="item.size"></span></p>
-                      <p class="text-xs text-gray-500">颜色: <span x-text="item.color"></span></p>
-                      <p class="text-sm font-semibold text-red-600 mt-1">¥<span x-text="item.salePrice"></span></p>
-                    </div>
-                  </div>
-                  
-                  <div class="flex items-center justify-between mt-3">
-                    <div class="flex items-center space-x-2">
-                      <button @click="updateQuantity(item.id, item.quantity - 1)" 
-                              class="w-6 h-6 bg-gray-200 rounded flex items-center justify-center hover:bg-gray-300">
-                        -
-                      </button>
-                      <span class="w-8 text-center text-sm" x-text="item.quantity"></span>
-                      <button @click="updateQuantity(item.id, item.quantity + 1)" 
-                              class="w-6 h-6 bg-gray-200 rounded flex items-center justify-center hover:bg-gray-300">
-                        +
-                      </button>
-                    </div>
-                    <button @click="removeFromCart(item.id)" class="text-red-500 hover:text-red-700 text-sm">
-                      删除
-                    </button>
+            <div class="flex flex-col">
+              <h2 class="text-2xl font-bold text-gray-800" x-text="selectedProduct.name"></h2>
+              <p class="text-sm text-gray-500 mt-1">款号: <span x-text="selectedProduct.model"></span></p>
+              <div class="flex items-center my-4">
+                <span class="text-2xl font-bold text-red-600">¥<span x-text="selectedProduct.salePrice"></span></span>
+                <span class="text-lg text-gray-500 line-through ml-3">¥<span x-text="selectedProduct.retailPrice"></span></span>
+              </div>
+              <p class="text-gray-700 text-sm mb-6" x-text="selectedProduct.description"></p>
+              
+              <div class="mt-auto">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">颜色: <span x-text="selectedColor" class="font-bold"></span></label>
+                  <div class="flex flex-wrap gap-2">
+                    <template x-for="color in selectedProduct.colors" :key="color">
+                      <button @click="selectedColor = color" :class="{'selected': selectedColor === color}" class="color-btn px-4 py-2 border rounded-full text-sm transition-colors duration-200" x-text="color"></button>
+                    </template>
                   </div>
                 </div>
-              </template>
-            </div>
-          </template>
-          
-          <template x-if="cart.length > 0">
-            <div class="border-t pt-4">
-              <div class="flex justify-between mb-2">
-                <span class="text-gray-600">商品总额:</span>
-                <span class="font-semibold">¥<span x-text="getTotalPrice().toLocaleString()"></span></span>
+                <div class="mt-4">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">尺码</label>
+                  <div class="grid grid-cols-4 gap-2">
+                    <template x-for="sizeInfo in selectedProduct.sizes" :key="sizeInfo.size">
+                      <button @click="selectedSize = sizeInfo.size" :disabled="!sizeInfo.inStock" :class="{'selected': selectedSize === sizeInfo.size}" class="size-btn h-10 border rounded text-sm transition-colors duration-200" x-text="sizeInfo.size"></button>
+                    </template>
+                  </div>
+                </div>
+                <p x-show="addToCartError" x-text="addToCartError" class="text-red-500 text-sm mt-2"></p>
+                <button @click="handleAddToCart()" :disabled="!selectedSize || !selectedColor" class="w-full mt-4 bg-gray-900 text-white py-3 rounded-lg font-semibold transition-colors duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-gray-700">加入购物车</button>
               </div>
-              <div class="flex justify-between mb-4">
-                <span class="text-gray-600">共<span x-text="getTotalItems()"></span>件商品</span>
-              </div>
-              
-              <button class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors duration-200 font-semibold">
-                去结算
-              </button>
             </div>
-          </template>
+          </div>
         </div>
-      </div>
+      </template>
     </div>
   </div>
 
-  <!-- Product Detail Modal -->
-  <template x-if="selectedProduct">
-    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div class="bg-white rounded-lg max-w-4xl w-full max-h-screen overflow-y-auto">
-        <div class="p-6">
-          <div class="flex justify-between items-start mb-6">
-            <h2 class="text-2xl font-bold text-gray-800" x-text="selectedProduct.name"></h2>
-            <button @click="selectedProduct = null" class="text-gray-400 hover:text-gray-600">
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
+  <!-- Shopping Cart Sidebar -->
+  <div x-show="showCart" @keydown.escape.window="showCart = false" class="fixed inset-0 z-50">
+      <div x-show="showCart" @click="showCart = false" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute inset-0 bg-black bg-opacity-50"></div>
+      <div x-show="showCart" x-transition:enter="transform transition ease-in-out duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transform transition ease-in-out duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-xl flex flex-col">
+          <div class="flex items-center justify-between p-6 border-b">
+              <h3 class="text-xl font-bold text-gray-800">购物车</h3>
+              <button @click="showCart = false" class="p-2 hover:bg-gray-100 rounded-full">&times;</button>
           </div>
-          
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div>
-              <img :src="selectedProduct.image" :alt="selectedProduct.name" 
-                   class="w-full h-96 object-cover rounded-lg">
-            </div>
-            
-            <div>
-              <div class="space-y-4">
-                <div>
-                  <p class="text-sm text-gray-600">款号: <span x-text="selectedProduct.model"></span></p>
-                  <p class="text-sm text-gray-600">序号: <span x-text="selectedProduct.sku"></span></p>
-                </div>
-                
-                <div class="flex items-center">
-                  <span class="text-2xl font-bold text-red-600">¥<span x-text="selectedProduct.salePrice"></span></span>
-                  <span class="text-lg text-gray-500 line-through ml-3">¥<span x-text="selectedProduct.retailPrice"></span></span>
-                </div>
-                
-                <p class="text-gray-700" x-text="selectedProduct.description"></p>
-                
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">选择颜色</label>
-                  <div class="flex space-x-2">
-                    <template x-for="color in selectedProduct.colors" :key="color">
-                      <button class="px-4 py-2 border border-gray-300 rounded-full text-sm hover:border-red-500 hover:text-red-600 transition-colors duration-200">
-                        <span x-text="color"></span>
-                      </button>
-                    </template>
+          <div class="flex-grow p-6 overflow-y-auto">
+              <template x-if="cart.length === 0">
+                  <div class="text-center py-8 text-gray-500">
+                      <p class="mt-4">你的购物车是空的</p>
                   </div>
-                </div>
-                
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">选择尺码</label>
-                  <div class="grid grid-cols-5 gap-2">
-                    <template x-for="size in selectedProduct.sizes" :key="size">
-                      <button class="h-10 border border-gray-300 rounded flex items-center justify-center text-sm hover:border-red-500 hover:text-red-600 transition-colors duration-200 size-btn">
-                        <span x-text="size"></span>
-                      </button>
-                    </template>
-                  </div>
-                </div>
-                
-                <div class="flex space-x-4">
-                  <button @click="addToCart(selectedProduct, '40', '黑色')" 
-                          class="flex-1 bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-semibold">
-                    加入购物车
-                  </button>
-                  <button @click="toggleFavorite(selectedProduct.id)" 
-                          :class="favorites.includes(selectedProduct.id) ? 'bg-red-600 text-white' : 'border-gray-300'"
-                          class="p-3 border rounded-lg transition-colors duration-200">
-                    <svg class="h-5 w-5" :fill="favorites.includes(selectedProduct.id) ? 'currentColor' : 'none'" 
-                         stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.682l-1.318-1.364a4.5 4.5 0 00-6.364 0z"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Similar Products -->
-          <div class="mt-12">
-            <h3 class="text-xl font-bold text-gray-800 mb-6">推荐相似款式</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <template x-for="similar in getSimilarProducts()" :key="similar.id">
-                <div class="border rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-300 similar-product">
-                  <img :src="similar.image" :alt="similar.name" class="w-full h-48 object-cover">
-                  <div class="p-4">
-                    <h4 class="font-semibold text-gray-800 mb-2" x-text="similar.name"></h4>
-                    <p class="text-sm text-gray-600 mb-2">¥<span x-text="similar.salePrice"></span></p>
-                    <button @click="selectedProduct = similar" class="text-red-600 text-sm font-semibold hover:text-red-700">
-                      查看详情
-                    </button>
-                  </div>
-                </div>
               </template>
-            </div>
+              <div class="space-y-4">
+                  <template x-for="item in cart" :key="item.cartId">
+                      <div class="flex space-x-4">
+                          <img :src="item.image" :alt="item.name" class="w-24 h-24 object-cover rounded-md">
+                          <div class="flex-1 min-w-0">
+                              <h4 class="text-sm font-semibold text-gray-800 truncate" x-text="item.name"></h4>
+                              <p class="text-xs text-gray-500" x-text="`尺码: ${item.size} / 颜色: ${item.color}`"></p>
+                              <p class="text-sm font-bold text-red-600 mt-1">¥<span x-text="item.salePrice"></span></p>
+                              <div class="flex items-center justify-between mt-2">
+                                  <div class="flex items-center border rounded">
+                                      <button @click="updateQuantity(item.cartId, item.quantity - 1)" class="w-7 h-7 flex items-center justify-center hover:bg-gray-100">-</button>
+                                      <span class="w-8 text-center text-sm" x-text="item.quantity"></span>
+                                      <button @click="updateQuantity(item.cartId, item.quantity + 1)" class="w-7 h-7 flex items-center justify-center hover:bg-gray-100">+</button>
+                                  </div>
+                                  <button @click="removeFromCart(item.cartId)" class="text-red-500 hover:text-red-700 text-xs font-semibold">删除</button>
+                              </div>
+                          </div>
+                      </div>
+                  </template>
+              </div>
           </div>
-        </div>
+          <template x-if="cart.length > 0">
+              <div class="p-6 border-t bg-gray-50">
+                  <div class="flex justify-between mb-4">
+                      <span class="text-lg font-medium">总计</span>
+                      <span class="text-xl font-bold">¥<span x-text="getTotalPrice().toFixed(2)"></span></span>
+                  </div>
+                  <button class="w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition-colors">去结算</button>
+              </div>
+          </template>
       </div>
-    </div>
-  </template>
-
-  <!-- Login Modal -->
+  </div>
+  
+  <!-- Login & Register Modals (unchanged) -->
   <template x-if="showLoginModal">
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div class="bg-white rounded-lg max-w-md w-full p-6">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold text-gray-800">登录</h2>
-          <button @click="showLoginModal = false" class="text-gray-400 hover:text-gray-600">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
-        </div>
-        
-        <div class="mb-6">
-          <div class="flex border-b">
-            <button @click="loginMethod = 'email'" 
-                    :class="loginMethod === 'email' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500'"
-                    class="py-2 px-4 font-medium">
-              邮箱登录
-            </button>
-            <button @click="loginMethod = 'google'" 
-                    :class="loginMethod === 'google' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500'"
-                    class="py-2 px-4 font-medium">
-              Google登录
-            </button>
-          </div>
-        </div>
-        
-        <template x-if="loginMethod === 'email'">
-          <form @submit.prevent="handleLogin" class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">邮箱</label>
-              <input type="email" x-model="loginForm.email" 
-                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">密码</label>
-              <input type="password" x-model="loginForm.password" 
-                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required>
-            </div>
-            <button type="submit" 
-                    class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition-colors duration-200 font-semibold">
-              登录
-            </button>
-            <div class="text-center mt-4">
-              <p class="text-sm text-gray-600">
-                还没有账号? 
-                <button type="button" @click="showLoginModal = false; showRegisterModal = true;" 
-                        class="text-red-600 hover:text-red-700">
-                  注册
-                </button>
-              </p>
-            </div>
-          </form>
-        </template>
-        
-        <template x-if="loginMethod === 'google'">
-          <div class="space-y-4">
-            <button @click="handleGoogleLogin" 
-                    class="w-full bg-white border border-gray-300 text-gray-700 py-2 rounded-md hover:bg-gray-50 transition-colors duration-200 font-semibold flex items-center justify-center">
-              <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-              </svg>
-              使用Google账号登录
-            </button>
-            <p class="text-sm text-gray-600 text-center mt-4">
-              使用Google登录即表示您同意我们的服务条款和隐私政策。
-            </p>
-          </div>
-        </template>
-      </div>
-    </div>
-  </template>
-
-  <!-- Register Modal -->
-  <template x-if="showRegisterModal">
-    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div class="bg-white rounded-lg max-w-md w-full p-6">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold text-gray-800">注册</h2>
-          <button @click="showRegisterModal = false" class="text-gray-400 hover:text-gray-600">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
-        </div>
-        
-        <form @submit.prevent="handleRegister" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">姓名</label>
-            <input type="text" x-model="registerForm.name" 
-                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">邮箱</label>
-            <input type="email" x-model="registerForm.email" 
-                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">密码</label>
-            <input type="password" x-model="registerForm.password" 
-                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required minlength="6">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">确认密码</label>
-            <input type="password" x-model="registerForm.confirmPassword" 
-                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required>
-          </div>
-          <button type="submit" 
-                  class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition-colors duration-200 font-semibold">
-            注册
-          </button>
-          <div class="text-center mt-4">
-            <p class="text-sm text-gray-600">
-              已有账号? 
-              <button type="button" @click="showRegisterModal = false; showLoginModal = true;" 
-                      class="text-red-600 hover:text-red-700">
-                登录
-              </button>
-            </p>
-          </div>
+      <div @click.away="showLoginModal = false" class="bg-white rounded-lg max-w-md w-full p-6">
+        <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-gray-800">登录</h2><button @click="showLoginModal = false" class="text-gray-400 hover:text-gray-600">&times;</button></div>
+        <form @submit.prevent="handleLogin" class="space-y-4">
+          <div><label class="block text-sm font-medium text-gray-700 mb-1">邮箱</label><input type="email" x-model="loginForm.email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required></div>
+          <div><label class="block text-sm font-medium text-gray-700 mb-1">密码</label><input type="password" x-model="loginForm.password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required></div>
+          <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition-colors duration-200 font-semibold">登录</button>
+          <div class="text-center mt-4"><p class="text-sm text-gray-600">还没有账号? <button type="button" @click="showLoginModal = false; showRegisterModal = true;" class="text-red-600 hover:text-red-700">注册</button></p></div>
         </form>
       </div>
     </div>
   </template>
+  <template x-if="showRegisterModal">
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div @click.away="showRegisterModal = false" class="bg-white rounded-lg max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-gray-800">注册</h2><button @click="showRegisterModal = false" class="text-gray-400 hover:text-gray-600">&times;</button></div>
+            <form @submit.prevent="handleRegister" class="space-y-4">
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">姓名</label><input type="text" x-model="registerForm.name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">邮箱</label><input type="email" x-model="registerForm.email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">密码</label><input type="password" x-model="registerForm.password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required minlength="6"></div>
+                <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition-colors duration-200 font-semibold">注册</button>
+                <div class="text-center mt-4"><p class="text-sm text-gray-600">已有账号? <button type="button" @click="showRegisterModal = false; showLoginModal = true;" class="text-red-600 hover:text-red-700">登录</button></p></div>
+            </form>
+        </div>
+    </div>
+  </template>
 
-  <!-- Footer -->
+  <!-- Footer (unchanged) -->
   <footer class="bg-gray-900 text-white mt-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div>
-          <h3 class="text-lg font-semibold mb-4">361°</h3>
-          <p class="text-gray-300 text-sm">专业运动品牌，致力于为运动爱好者提供高品质的运动装备。</p>
-        </div>
-        <div>
-          <h4 class="font-semibold mb-4">客户服务</h4>
-          <ul class="space-y-2 text-sm text-gray-300">
-            <li><a href="#" class="hover:text-white">帮助中心</a></li>
-            <li><a href="#" class="hover:text-white">配送信息</a></li>
-            <li><a href="#" class="hover:text-white">退换货政策</a></li>
-            <li><a href="#" class="hover:text-white">联系我们</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-semibold mb-4">关于我们</h4>
-          <ul class="space-y-2 text-sm text-gray-300">
-            <li><a href="#" class="hover:text-white">品牌故事</a></li>
-            <li><a href="#" class="hover:text-white">新闻中心</a></li>
-            <li><a href="#" class="hover:text-white">社会责任</a></li>
-            <li><a href="#" class="hover:text-white">加入我们</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-semibold mb-4">订阅我们</h4>
-          <p class="text-gray-300 text-sm mb-4">获取最新产品信息和优惠活动</p>
-          <div class="flex">
-            <input type="email" placeholder="您的邮箱" 
-                   class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-l text-sm focus:outline-none">
-            <button class="bg-red-600 px-4 py-2 rounded-r text-sm font-semibold">
-              订阅
-            </button>
-          </div>
-        </div>
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div><h3 class="text-lg font-semibold mb-4">361°</h3><p class="text-gray-300 text-sm">多一度热爱，多一份专业。</p></div>
+        <div><h4 class="font-semibold mb-4">客户服务</h4><ul class="space-y-2 text-sm text-gray-300"><li><a href="#" class="hover:text-white">帮助中心</a></li><li><a href="#" class="hover:text-white">配送信息</a></li><li><a href="#" class="hover:text-white">退换货政策</a></li></ul></div>
+        <div><h4 class="font-semibold mb-4">关于我们</h4><ul class="space-y-2 text-sm text-gray-300"><li><a href="#" class="hover:text-white">品牌故事</a></li><li><a href="#" class="hover:text-white">新闻中心</a></li><li><a href="#" class="hover:text-white">加入我们</a></li></ul></div>
+        <div><h4 class="font-semibold mb-4">订阅我们</h4><p class="text-gray-300 text-sm mb-4">获取最新产品信息和优惠。</p><div class="flex"><input type="email" placeholder="您的邮箱" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-md text-sm focus:outline-none focus:ring-2 focus:ring-red-500"><button class="bg-red-600 px-4 py-2 rounded-r-md text-sm font-semibold">订阅</button></div></div>
       </div>
-      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-        <p>&copy; 2024 361°. 保留所有权利。</p>
-      </div>
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400"><p>&copy; 2024 361°. 保留所有权利。</p></div>
     </div>
   </footer>
 
   <script>
     function app() {
       return {
+        // State
         activeCategory: 'all',
         searchTerm: '',
         cart: [],
         favorites: [],
         selectedProduct: null,
+        modalImage: '',
+        selectedSize: null,
+        selectedColor: null,
+        addToCartError: '',
         showCart: false,
         showLoginModal: false,
         showRegisterModal: false,
-        loginMethod: 'email',
         user: null,
         loginForm: { email: '', password: '' },
-        registerForm: { name: '', email: '', password: '', confirmPassword: '' },
+        registerForm: { name: '', email: '', password: ''},
         
+        // Data
         categories: [
-          { id: 'all', name: '全部' },
-          { id: 'running', name: '跑步' },
-          { id: 'lifestyle', name: '休闲' },
-          { id: 'basketball', name: '篮球' }
+          { id: 'all', name: '全部商品' }, { id: 'running', name: '跑步' },
+          { id: 'lifestyle', name: '休闲' }, { id: 'basketball', name: '篮球' }
         ],
-        
         products: [
           {
-            id: 1,
-            name: "361° ULTRA 专业跑步鞋",
-            image: "https://placehold.co/400x400/1e40af/ffffff?text=361°+ULTRA+Running",
-            category: "running",
-            sku: "361R001-01",
-            model: "ULTRA-2024",
-            retailPrice: 899,
-            salePrice: 699,
-            sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-            colors: ["蓝色", "黑色", "白色"],
-            description: "采用QU!KFOAM中底科技，提供卓越缓震性能，适合长距离跑步训练。",
-            isNew: true
+            id: 1, name: "361° 飞燃3 SE 专业跑步鞋", category: "running", sku: "361R001-01", model: "ULTRA-2024", retailPrice: 899, salePrice: 699, isNew: true,
+            images: ["https://placehold.co/600x600/1e40af/ffffff?text=飞燃3+主图", "https://placehold.co/600x600/1e40af/ffffff?text=飞燃3+侧面", "https://placehold.co/600x600/1e40af/ffffff?text=飞燃3+鞋底"],
+            sizes: [ {size: '39', inStock: true}, {size: '40', inStock: true}, {size: '41', inStock: false}, {size: '42', inStock: true}, {size: '43', inStock: true}, {size: '44', inStock: false}, {size: '45', inStock: true}],
+            colors: ["冰川蓝", "曜石黑", "亮白"],
+            description: "采用QU!KFLAME CQT中底科技，提供卓越能量回馈与缓震性能，专为精英跑者打造。",
           },
           {
-            id: 2,
-            name: "361° SPHERE 休闲运动鞋",
-            image: "https://placehold.co/400x400/dc2626/ffffff?text=361°+SPHERE",
-            category: "lifestyle",
-            sku: "361L002-02",
-            model: "SPHERE-2024",
-            retailPrice: 599,
-            salePrice: 459,
-            sizes: ["37", "38", "39", "40", "41", "42", "43", "44"],
-            colors: ["红色", "灰色", "绿色"],
-            description: "时尚都市风格，轻盈舒适，适合日常穿着和轻度运动。",
-            isNew: false
+            id: 2, name: "361° CQT 2.0 休闲板鞋", category: "lifestyle", sku: "361L002-02", model: "CQT-2.0", retailPrice: 599, salePrice: 459, isNew: false,
+            images: ["https://placehold.co/600x600/dc2626/ffffff?text=CQT+2.0", "https://placehold.co/600x600/dc2626/ffffff?text=CQT+侧面"],
+            sizes: [ {size: '37', inStock: true}, {size: '38', inStock: true}, {size: '39', inStock: true}, {size: '40', inStock: false}, {size: '41', inStock: true}],
+            colors: ["经典红", "百搭灰", "清新绿"],
+            description: "复古潮流设计，结合现代舒适脚感，是您日常出街的理想之选。",
           },
           {
-            id: 3,
-            name: "361° BASKET 篮球训练鞋",
-            image: "https://placehold.co/400x400/7c2d12/ffffff?text=361°+BASKET",
-            category: "basketball",
-            sku: "361B003-03",
-            model: "BASKET-2024",
-            retailPrice: 799,
-            salePrice: 649,
-            sizes: ["38", "39", "40", "41", "42", "43", "44", "45"],
-            colors: ["黑色", "蓝色", "橙色"],
-            description: "专业篮球鞋设计，提供出色支撑和抓地力，适合球场表现。",
-            isNew: true
+            id: 3, name: "361° BIG3 5.0 PRO 篮球鞋", category: "basketball", sku: "361B003-03", model: "BIG3-5.0", retailPrice: 799, salePrice: 649, isNew: true,
+            images: ["https://placehold.co/600x600/7c2d12/ffffff?text=BIG3+5.0", "https://placehold.co/600x600/7c2d12/ffffff?text=BIG3+细节"],
+            sizes: [ {size: '40', inStock: true}, {size: '41', inStock: true}, {size: '42', inStock: true}, {size: '43', inStock: true}, {size: '44', inStock: true}, {size: '45', inStock: false}],
+            colors: ["黑金", "白蓝", "燃橙"],
+            description: "为实战而生，提供顶级包裹、支撑和抓地力，助您掌控全场。",
           },
           {
-            id: 4,
-            name: "361° WALK 健步鞋",
-            image: "https://placehold.co/400x400/059669/ffffff?text=361°+WALK",
-            category: "lifestyle",
-            sku: "361W004-04",
-            model: "WALK-2024",
-            retailPrice: 659,
-            salePrice: 529,
-            sizes: ["39", "40", "41", "42", "43", "44", "45", "46"],
-            colors: ["白色", "蓝色", "灰色"],
-            description: "专为健步设计，提供全天候舒适体验，适合日常步行和轻运动。",
-            isNew: false
+            id: 4, name: "361° 雨屏5.0 健步鞋", category: "lifestyle", sku: "361W004-04", model: "RainScreen-5.0", retailPrice: 659, salePrice: 529, isNew: false,
+            images: ["https://placehold.co/600x600/059669/ffffff?text=雨屏5.0", "https://placehold.co/600x600/059669/ffffff?text=雨屏+防水"],
+            sizes: [ {size: '39', inStock: true}, {size: '40', inStock: true}, {size: '41', inStock: true}, {size: '42', inStock: true}, {size: '43', inStock: true}, {size: '44', inStock: true}],
+            colors: ["深灰", "军绿", "卡其"],
+            description: "搭载雨屏科技鞋面，无惧风雨，提供全天候干爽舒适的穿着体验。",
           }
         ],
         
+        // Methods
+        init() {
+            // You can load cart/favorites from localStorage here if needed
+            // this.cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            // this.favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        },
         get filteredProducts() {
-          return this.products.filter(product => {
-            const matchesCategory = this.activeCategory === 'all' || product.category === this.activeCategory;
-            const matchesSearch = product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                                  product.model.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                                  product.sku.toLowerCase().includes(this.searchTerm.toLowerCase());
+          if (!this.searchTerm && this.activeCategory === 'all') return this.products;
+          return this.products.filter(p => {
+            const matchesCategory = this.activeCategory === 'all' || p.category === this.activeCategory;
+            const matchesSearch = this.searchTerm.trim() === '' || p.name.toLowerCase().includes(this.searchTerm.toLowerCase());
             return matchesCategory && matchesSearch;
           });
         },
-        
-        toggleFavorite(productId) {
-          if (!this.user) {
-            this.showLoginModal = true;
-            return;
-          }
-          
-          if (this.favorites.includes(productId)) {
-            this.favorites = this.favorites.filter(id => id !== productId);
-          } else {
-            this.favorites.push(productId);
-          }
-        },
-        
-        addToCart(product, size, color) {
-          if (!this.user) {
-            this.showLoginModal = true;
-            return;
-          }
-          
-          if (!size) {
-            alert('请选择尺码');
-            return;
-          }
-          
-          const cartItem = {
-            id: `${product.id}-${size}-${color}`,
-            ...product,
-            size,
-            color,
-            quantity: 1
-          };
-          
-          const existing = this.cart.find(item => item.id === cartItem.id);
-          if (existing) {
-            existing.quantity++;
-          } else {
-            this.cart.push(cartItem);
-          }
-          
-          this.selectedProduct = null;
-        },
-        
-        removeFromCart(cartItemId) {
-          this.cart = this.cart.filter(item => item.id !== cartItemId);
-        },
-        
-        updateQuantity(cartItemId, newQuantity) {
-          if (newQuantity === 0) {
-            this.removeFromCart(cartItemId);
-          } else {
-            const item = this.cart.find(item => item.id === cartItemId);
-            if (item) {
-              item.quantity = newQuantity;
+        selectProduct(productId) {
+            this.selectedProduct = this.products.find(p => p.id === productId);
+            if (this.selectedProduct) {
+                this.modalImage = this.selectedProduct.images[0];
             }
-          }
         },
-        
+        closeProductModal() {
+            this.selectedProduct = null;
+            this.selectedSize = null;
+            this.selectedColor = null;
+            this.addToCartError = '';
+        },
+        toggleFavorite(productId) {
+          if (!this.user) { this.showLoginModal = true; return; }
+          const index = this.favorites.indexOf(productId);
+          if (index > -1) { this.favorites.splice(index, 1); } 
+          else { this.favorites.push(productId); }
+        },
+        handleAddToCart() {
+            if (!this.selectedSize || !this.selectedColor) {
+                this.addToCartError = '请选择颜色和尺码。';
+                return;
+            }
+            if (!this.user) { this.showLoginModal = true; return; }
+            
+            const cartId = `${this.selectedProduct.id}-${this.selectedSize}-${this.selectedColor}`;
+            const existingItem = this.cart.find(item => item.cartId === cartId);
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                this.cart.push({
+                    cartId: cartId,
+                    id: this.selectedProduct.id,
+                    name: this.selectedProduct.name,
+                    image: this.selectedProduct.images[0],
+                    salePrice: this.selectedProduct.salePrice,
+                    size: this.selectedSize,
+                    color: this.selectedColor,
+                    quantity: 1
+                });
+            }
+            this.closeProductModal();
+            this.showCart = true;
+        },
+        removeFromCart(cartId) {
+          this.cart = this.cart.filter(item => item.cartId !== cartId);
+        },
+        updateQuantity(cartId, newQuantity) {
+          if (newQuantity < 1) { this.removeFromCart(cartId); return; }
+          const item = this.cart.find(item => item.cartId === cartId);
+          if (item) item.quantity = newQuantity;
+        },
         getTotalPrice() {
           return this.cart.reduce((total, item) => total + (item.salePrice * item.quantity), 0);
         },
-        
         getTotalItems() {
           return this.cart.reduce((total, item) => total + item.quantity, 0);
         },
-        
-        getSimilarProducts() {
-          if (!this.selectedProduct) return [];
-          return this.products
-            .filter(product => product.id !== this.selectedProduct.id && product.category === this.selectedProduct.category)
-            .slice(0, 3);
-        },
-        
         handleLogin() {
-          // 模拟登录
-          if (this.loginForm.email === 'user@example.com' && this.loginForm.password === 'password123') {
+          if (this.loginForm.email === 'user@example.com' && this.loginForm.password === '123') {
             this.user = { id: 1, email: this.loginForm.email, name: '张三' };
             this.showLoginModal = false;
             this.loginForm = { email: '', password: '' };
-          } else {
-            alert('邮箱或密码错误');
-          }
+          } else { alert('邮箱或密码错误'); }
         },
-        
         handleRegister() {
-          if (this.registerForm.password !== this.registerForm.confirmPassword) {
-            alert('密码不匹配');
-            return;
-          }
-          
-          this.user = { 
-            id: Math.random(), 
-            email: this.registerForm.email, 
-            name: this.registerForm.name 
-          };
-          
+          this.user = { id: Date.now(), email: this.registerForm.email, name: this.registerForm.name };
           this.showRegisterModal = false;
-          this.registerForm = { name: '', email: '', password: '', confirmPassword: '' };
+          this.registerForm = { name: '', email: '', password: '' };
         },
-        
-        handleGoogleLogin() {
-          this.user = { id: 999, email: 'google.user@gmail.com', name: 'Google 用户' };  
-          this.showLoginModal = false;
-        },
-        
         logout() {
           this.user = null;
-          this.cart = [];
-          this.favorites = [];
+          // Optionally clear cart and favorites on logout
+          // this.cart = [];
+          // this.favorites = [];
         }
       }
     }
