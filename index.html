@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>361° 官方商城</title>
+  <title>361° 官方商城 - 多一度热爱</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -40,12 +40,10 @@
   </style>
 </head>
 <body x-data="app()" x-cloak class="bg-gray-50">
-  
   <!-- Loading Spinner -->
   <div x-show="isLoading" class="fixed inset-0 bg-white flex items-center justify-center z-50">
       <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-600"></div>
   </div>
-
   <!-- Header -->
   <header class="bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-40">
     <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,20 +55,19 @@
             <button @click="activeCategory = 'running'" :class="activeCategory === 'running' ? 'text-red-600' : 'text-gray-700'" class="text-sm font-medium hover:text-red-600 transition-colors duration-200">🏃 跑步</button>
             <button @click="activeCategory = 'lifestyle'" :class="activeCategory === 'lifestyle' ? 'text-red-600' : 'text-gray-700'" class="text-sm font-medium hover:text-red-600 transition-colors duration-200">👕 休闲</button>
             <button @click="activeCategory = 'basketball'" :class="activeCategory === 'basketball' ? 'text-red-600' : 'text-gray-700'" class="text-sm font-medium hover:text-red-600 transition-colors duration-200">🏀 篮球</button>
+            <button @click="activeCategory = 'training'" :class="activeCategory === 'training' ? 'text-red-600' : 'text-gray-700'" class="text-sm font-medium hover:text-red-600 transition-colors duration-200">🏋️ 训练</button>
+            <button @click="activeCategory = 'outdoor'" :class="activeCategory === 'outdoor' ? 'text-red-600' : 'text-gray-700'" class="text-sm font-medium hover:text-red-600 transition-colors duration-200">⛰️ 户外</button>
           </nav>
         </div>
-        
         <div class="flex items-center space-x-4">
           <div class="relative hidden sm:block">
-            <input type="text" placeholder="搜索商品..." x-model="searchTerm" class="pl-10 pr-4 py-2 border border-gray-300 rounded-full text-sm w-64 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all">
+            <input type="text" placeholder="搜索您喜爱的361°商品..." x-model="searchTerm" class="pl-10 pr-4 py-2 border border-gray-300 rounded-full text-sm w-64 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all">
             <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
           </div>
-          
           <button @click="showCart = true" class="relative p-2 hover:bg-gray-100 rounded-full">
             <svg class="h-6 w-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
             <span x-show="cart.length > 0" x-text="getTotalItems()" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full"></span>
           </button>
-          
           <template x-if="!user">
             <button @click="showLoginModal = true" class="text-sm text-gray-700 hover:text-red-600">登录</button>
           </template>
@@ -84,22 +81,19 @@
       </div>
     </div>
   </header>
-
   <!-- Main Content -->
   <main class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
     <!-- Hero Section -->
     <div class="bg-gradient-to-r from-red-500 to-orange-500 rounded-lg shadow-lg p-8 md:p-12 mb-12 text-white flex items-center">
         <div class="flex-1">
             <h2 class="text-3xl md:text-5xl font-bold mb-2">飞燃3代，疾速上市</h2>
-            <p class="text-lg md:text-xl mb-6">为速度而生，体验极致轻盈与回弹。</p>
+            <p class="text-lg md:text-xl mb-6">为速度而生，体验极致轻盈与回弹，点燃你的每一步。</p>
             <button @click="activeCategory = 'running'" class="bg-white text-red-600 font-bold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors">立即探索</button>
         </div>
         <div class="hidden md:block w-1/3">
-            <img src="https://placehold.co/400x300/ffffff/FE5A28?text=飞燃3" alt="Running Shoe" class="transform -rotate-12 hover:rotate-0 transition-transform duration-500">
+            <img src="https://picsum.photos/id/1/400/300" alt="飞燃3代跑步鞋" class="transform -rotate-12 hover:rotate-0 transition-transform duration-500">
         </div>
     </div>
-
     <!-- Product Grid -->
     <div>
         <div class="flex items-center justify-between mb-6">
@@ -107,8 +101,8 @@
             <span x-text="categories.find(c => c.id === activeCategory)?.name"></span>
             <span class="text-gray-500 ml-2 text-lg">(<span x-text="filteredProducts.length"></span>)</span>
           </h1>
+          <p class="text-sm text-gray-500">精选优质运动装备</p>
         </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <template x-for="product in filteredProducts" :key="product.id">
             <div class="bg-white rounded-lg shadow-sm hover:shadow-xl transition-shadow duration-300 product-card flex flex-col">
@@ -121,10 +115,9 @@
                   <svg class="h-5 w-5" :class="favorites.includes(product.id) ? 'text-red-500 fill-current' : 'text-gray-500'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.682l-1.318-1.364a4.5 4.5 0 00-6.364 0z"></path></svg>
                 </button>
               </div>
-              
               <div class="p-4 flex flex-col flex-grow">
                 <h3 class="text-base font-semibold text-gray-800 mb-2 line-clamp-2 flex-grow" x-text="product.name"></h3>
-                <p class="text-sm text-gray-500 mb-3" x-text="`${product.colors.length} 种颜色`"></p>
+                <p class="text-sm text-gray-500 mb-3" x-text="`${product.colors.length} 种颜色可选`"></p>
                 <div class="flex items-center mb-4">
                   <span class="text-lg font-bold text-red-600">¥<span x-text="product.salePrice"></span></span>
                   <span class="text-sm text-gray-500 line-through ml-2">¥<span x-text="product.retailPrice"></span></span>
@@ -137,14 +130,13 @@
       </div>
     </div>
   </main>
-
   <!-- Product Detail Modal -->
   <div x-show="selectedProduct" @keydown.escape.window="closeProductModal()" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
     <div @click.away="closeProductModal()" class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto" x-show="selectedProduct" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
       <template x-if="selectedProduct">
         <div class="p-6">
           <div class="flex justify-end">
-            <button @click="closeProductModal()" class="text-gray-400 hover:text-gray-600">&times;</button>
+            <button @click="closeProductModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
           </div>
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>
@@ -163,7 +155,6 @@
                 <span class="text-lg text-gray-500 line-through ml-3">¥<span x-text="selectedProduct.retailPrice"></span></span>
               </div>
               <p class="text-gray-700 text-sm mb-6" x-text="selectedProduct.description"></p>
-              
               <div class="mt-auto">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">颜色: <span x-text="selectedColor" class="font-bold"></span></label>
@@ -189,19 +180,20 @@
       </template>
     </div>
   </div>
-
   <!-- Shopping Cart Sidebar -->
   <div x-show="showCart" @keydown.escape.window="showCart = false" class="fixed inset-0 z-50">
       <div x-show="showCart" @click="showCart = false" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute inset-0 bg-black bg-opacity-50"></div>
       <div x-show="showCart" x-transition:enter="transform transition ease-in-out duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transform transition ease-in-out duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-xl flex flex-col">
           <div class="flex items-center justify-between p-6 border-b">
               <h3 class="text-xl font-bold text-gray-800">购物车</h3>
-              <button @click="showCart = false" class="p-2 hover:bg-gray-100 rounded-full">&times;</button>
+              <button @click="showCart = false" class="p-2 hover:bg-gray-100 rounded-full text-xl">&times;</button>
           </div>
           <div class="flex-grow p-6 overflow-y-auto">
               <template x-if="cart.length === 0">
                   <div class="text-center py-8 text-gray-500">
-                      <p class="mt-4">你的购物车是空的</p>
+                      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                      <p class="mt-4">您的购物车是空的</p>
+                      <button @click="showCart = false" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">去逛逛</button>
                   </div>
               </template>
               <div class="space-y-4">
@@ -236,48 +228,72 @@
           </template>
       </div>
   </div>
-  
   <!-- Login Modal -->
   <div x-show="showLoginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
     <div @click.away="showLoginModal = false" class="bg-white rounded-lg max-w-md w-full p-6" x-show="showLoginModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
-        <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-gray-800">登录</h2><button @click="showLoginModal = false" class="text-gray-400 hover:text-gray-600">&times;</button></div>
+        <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-gray-800">会员登录</h2><button @click="showLoginModal = false" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button></div>
         <form @submit.prevent="handleLogin" class="space-y-4">
-          <div><label class="block text-sm font-medium text-gray-700 mb-1">邮箱</label><input type="email" x-model="loginForm.email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required></div>
-          <div><label class="block text-sm font-medium text-gray-700 mb-1">密码</label><input type="password" x-model="loginForm.password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required></div>
-          <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition-colors duration-200 font-semibold">登录</button>
-          <div class="text-center mt-4"><p class="text-sm text-gray-600">还没有账号? <button type="button" @click="showLoginModal = false; showRegisterModal = true;" class="text-red-600 hover:text-red-700">注册</button></p></div>
+          <div><label class="block text-sm font-medium text-gray-700 mb-1">邮箱地址</label><input type="email" x-model="loginForm.email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="example@email.com" required></div>
+          <div><label class="block text-sm font-medium text-gray-700 mb-1">登录密码</label><input type="password" x-model="loginForm.password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="请输入密码" required></div>
+          <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition-colors duration-200 font-semibold">立即登录</button>
+          <div class="text-center mt-4"><p class="text-sm text-gray-600">还没有361°账户? <button type="button" @click="showLoginModal = false; showRegisterModal = true;" class="text-red-600 hover:text-red-700 font-medium">立即注册</button></p></div>
         </form>
     </div>
   </div>
-  
   <!-- Register Modal -->
   <div x-show="showRegisterModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
     <div @click.away="showRegisterModal = false" class="bg-white rounded-lg max-w-md w-full p-6" x-show="showRegisterModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
-        <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-gray-800">注册</h2><button @click="showRegisterModal = false" class="text-gray-400 hover:text-gray-600">&times;</button></div>
+        <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-gray-800">创建账户</h2><button @click="showRegisterModal = false" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button></div>
         <form @submit.prevent="handleRegister" class="space-y-4">
-            <div><label class="block text-sm font-medium text-gray-700 mb-1">姓名</label><input type="text" x-model="registerForm.name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required></div>
-            <div><label class="block text-sm font-medium text-gray-700 mb-1">邮箱</label><input type="email" x-model="registerForm.email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required></div>
-            <div><label class="block text-sm font-medium text-gray-700 mb-1">密码</label><input type="password" x-model="registerForm.password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required minlength="6"></div>
-            <div><label class="block text-sm font-medium text-gray-700 mb-1">确认密码</label><input type="password" x-model="registerForm.confirmPassword" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required></div>
-            <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition-colors duration-200 font-semibold">注册</button>
-            <div class="text-center mt-4"><p class="text-sm text-gray-600">已有账号? <button type="button" @click="showRegisterModal = false; showLoginModal = true;" class="text-red-600 hover:text-red-700">登录</button></p></div>
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">真实姓名</label><input type="text" x-model="registerForm.name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="请输入您的姓名" required></div>
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">邮箱地址</label><input type="email" x-model="registerForm.email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="example@email.com" required></div>
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">登录密码</label><input type="password" x-model="registerForm.password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="至少6位字符" required minlength="6"></div>
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">确认密码</label><input type="password" x-model="registerForm.confirmPassword" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="请再次输入密码" required></div>
+            <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition-colors duration-200 font-semibold">创建账户</button>
+            <div class="text-center mt-4"><p class="text-sm text-gray-600">已有账户? <button type="button" @click="showRegisterModal = false; showLoginModal = true;" class="text-red-600 hover:text-red-700 font-medium">立即登录</button></p></div>
         </form>
     </div>
   </div>
-
   <!-- Footer -->
   <footer class="bg-gray-900 text-white mt-16">
     <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-        <div><h3 class="text-lg font-semibold mb-4">361°</h3><p class="text-gray-300 text-sm">多一度热爱，多一份专业。</p></div>
-        <div><h4 class="font-semibold mb-4">客户服务</h4><ul class="space-y-2 text-sm text-gray-300"><li><a href="#" class="hover:text-white">帮助中心</a></li><li><a href="#" class="hover:text-white">配送信息</a></li><li><a href="#" class="hover:text-white">退换货政策</a></li></ul></div>
-        <div><h4 class="font-semibold mb-4">关于我们</h4><ul class="space-y-2 text-sm text-gray-300"><li><a href="#" class="hover:text-white">品牌故事</a></li><li><a href="#" class="hover:text-white">新闻中心</a></li><li><a href="#" class="hover:text-white">加入我们</a></li></ul></div>
-        <div><h4 class="font-semibold mb-4">订阅我们</h4><p class="text-gray-300 text-sm mb-4">获取最新产品信息和优惠。</p><div class="flex"><input type="email" placeholder="您的邮箱" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-md text-sm focus:outline-none focus:ring-2 focus:ring-red-500"><button class="bg-red-600 px-4 py-2 rounded-r-md text-sm font-semibold">订阅</button></div></div>
+        <div>
+            <h3 class="text-lg font-semibold mb-4">361° 品牌</h3>
+            <p class="text-gray-300 text-sm">多一度热爱，多一份专业。我们致力于为全球运动爱好者提供高性价比的专业运动装备。</p>
+        </div>
+        <div>
+            <h4 class="font-semibold mb-4">客户服务</h4>
+            <ul class="space-y-2 text-sm text-gray-300">
+                <li><a href="#" class="hover:text-white">帮助中心</a></li>
+                <li><a href="#" class="hover:text-white">配送与物流</a></li>
+                <li><a href="#" class="hover:text-white">退换货政策</a></li>
+                <li><a href="#" class="hover:text-white">保养指南</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-semibold mb-4">关于我们</h4>
+            <ul class="space-y-2 text-sm text-gray-300">
+                <li><a href="#" class="hover:text-white">品牌故事</a></li>
+                <li><a href="#" class="hover:text-white">新闻中心</a></li>
+                <li><a href="#" class="hover:text-white">社会责任</a></li>
+                <li><a href="#" class="hover:text-white">加入我们</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-semibold mb-4">订阅我们</h4>
+            <p class="text-gray-300 text-sm mb-4">第一时间获取新品发布、独家优惠和品牌活动信息。</p>
+            <div class="flex">
+                <input type="email" placeholder="您的邮箱地址" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-md text-sm focus:outline-none focus:ring-2 focus:ring-red-500" aria-label="邮箱地址">
+                <button class="bg-red-600 px-4 py-2 rounded-r-md text-sm font-semibold hover:bg-red-700">订阅</button>
+            </div>
+        </div>
       </div>
-      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400"><p>&copy; 2024 361°. 保留所有权利。</p></div>
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+        <p>&copy; 2024 361° (三六一度) 集团. 保留所有权利。 闽ICP备12345678号</p>
+      </div>
     </div>
   </footer>
-
   <!-- Toast Notification -->
   <div x-show="toast.show" x-text="toast.message"
         x-transition:enter="transition ease-out duration-300"
@@ -288,7 +304,6 @@
         x-transition:leave-end="opacity-0 transform translate-y-2"
         class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-full shadow-lg z-50">
   </div>
-
   <script>
     function app() {
       return {
@@ -309,43 +324,98 @@
         loginForm: { email: '', password: '' },
         registerForm: { name: '', email: '', password: '', confirmPassword: ''},
         toast: { show: false, message: '', timer: null },
-        
         // Data
         categories: [
-          { id: 'all', name: '全部商品' }, { id: 'running', name: '跑步' },
-          { id: 'lifestyle', name: '休闲' }, { id: 'basketball', name: '篮球' }
+          { id: 'all', name: '全部商品' },
+          { id: 'running', name: '跑步' },
+          { id: 'lifestyle', name: '休闲' },
+          { id: 'basketball', name: '篮球' },
+          { id: 'training', name: '训练' },
+          { id: 'outdoor', name: '户外' }
         ],
-        products: [
-          {
-            id: 1, name: "361° 飞燃3 SE 专业跑步鞋", category: "running", sku: "361R001-01", model: "ULTRA-2024", retailPrice: 899, salePrice: 699, isNew: true,
-            images: ["https://placehold.co/600x600/1e40af/ffffff?text=飞燃3+主图", "https://placehold.co/600x600/1e40af/ffffff?text=飞燃3+侧面", "https://placehold.co/600x600/1e40af/ffffff?text=飞燃3+鞋底"],
-            sizes: [ {size: '39', inStock: true}, {size: '40', inStock: true}, {size: '41', inStock: false}, {size: '42', inStock: true}, {size: '43', inStock: true}, {size: '44', inStock: false}, {size: '45', inStock: true}],
-            colors: ["冰川蓝", "曜石黑", "亮白"],
-            description: "采用QU!KFLAME CQT中底科技，提供卓越能量回馈与缓震性能，专为精英跑者打造。",
-          },
-          {
-            id: 2, name: "361° CQT 2.0 休闲板鞋", category: "lifestyle", sku: "361L002-02", model: "CQT-2.0", retailPrice: 599, salePrice: 459, isNew: false,
-            images: ["https://placehold.co/600x600/dc2626/ffffff?text=CQT+2.0", "https://placehold.co/600x600/dc2626/ffffff?text=CQT+侧面"],
-            sizes: [ {size: '37', inStock: true}, {size: '38', inStock: true}, {size: '39', inStock: true}, {size: '40', inStock: false}, {size: '41', inStock: true}],
-            colors: ["经典红", "百搭灰", "清新绿"],
-            description: "复古潮流设计，结合现代舒适脚感，是您日常出街的理想之选。",
-          },
-          {
-            id: 3, name: "361° BIG3 5.0 PRO 篮球鞋", category: "basketball", sku: "361B003-03", model: "BIG3-5.0", retailPrice: 799, salePrice: 649, isNew: true,
-            images: ["https://placehold.co/600x600/7c2d12/ffffff?text=BIG3+5.0", "https://placehold.co/600x600/7c2d12/ffffff?text=BIG3+细节"],
-            sizes: [ {size: '40', inStock: true}, {size: '41', inStock: true}, {size: '42', inStock: true}, {size: '43', inStock: true}, {size: '44', inStock: true}, {size: '45', inStock: false}],
-            colors: ["黑金", "白蓝", "燃橙"],
-            description: "为实战而生，提供顶级包裹、支撑和抓地力，助您掌控全场。",
-          },
-          {
-            id: 4, name: "361° 雨屏5.0 健步鞋", category: "lifestyle", sku: "361W004-04", model: "RainScreen-5.0", retailPrice: 659, salePrice: 529, isNew: false,
-            images: ["https://placehold.co/600x600/059669/ffffff?text=雨屏5.0", "https://placehold.co/600x600/059669/ffffff?text=雨屏+防水"],
-            sizes: [ {size: '39', inStock: true}, {size: '40', inStock: true}, {size: '41', inStock: true}, {size: '42', inStock: true}, {size: '43', inStock: true}, {size: '44', inStock: true}],
-            colors: ["深灰", "军绿", "卡其"],
-            description: "搭载雨屏科技鞋面，无惧风雨，提供全天候干爽舒适的穿着体验。",
+        // 生成50个商品数据
+        products: (function() {
+          const baseProducts = [
+            {
+              id: 1, name: "361° 飞燃3 SE 专业跑步鞋", category: "running", model: "ULTRA-2024", retailPrice: 899, salePrice: 699, isNew: true,
+              images: ["https://picsum.photos/id/1/600/600", "https://picsum.photos/id/1/600/600?t=1", "https://picsum.photos/id/1/600/600?t=2"],
+              sizes: ['39', '40', '41', '42', '43', '44', '45'].map(size => ({size, inStock: Math.random() > 0.2})),
+              colors: ["冰川蓝", "曜石黑", "亮白", "烈焰红"],
+              description: "旗舰级竞速跑鞋，搭载QU!KFLAME CQT中底科技，提供卓越的能量回馈与缓震性能，专为追求极致速度的精英跑者打造。轻量化工程网布鞋面，透气贴合。",
+            },
+            {
+              id: 2, name: "361° CQT 2.0 休闲板鞋", category: "lifestyle", model: "CQT-2.0", retailPrice: 599, salePrice: 459, isNew: false,
+              images: ["https://picsum.photos/id/2/600/600", "https://picsum.photos/id/2/600/600?t=1"],
+              sizes: ['37', '38', '39', '40', '41'].map(size => ({size, inStock: Math.random() > 0.1})),
+              colors: ["经典红", "百搭灰", "清新绿", "深藏青"],
+              description: "复古潮流设计，结合现代舒适脚感，是您日常出街的理想之选。经典配色，百搭耐看，橡胶大底提供良好抓地力。",
+            },
+            {
+              id: 3, name: "361° BIG3 5.0 PRO 篮球鞋", category: "basketball", model: "BIG3-5.0", retailPrice: 799, salePrice: 649, isNew: true,
+              images: ["https://picsum.photos/id/3/600/600", "https://picsum.photos/id/3/600/600?t=1"],
+              sizes: ['40', '41', '42', '43', '44', '45'].map(size => ({size, inStock: Math.random() > 0.15})),
+              colors: ["黑金", "白蓝", "燃橙", "电光紫"],
+              description: "为实战而生的顶级篮球鞋，提供顶级的包裹、支撑和抓地力。高强度编织鞋面，TPU支撑框架，助您在球场上掌控全场，完成每一次精彩突破。",
+            },
+            {
+              id: 4, name: "361° 雨屏5.0 健步鞋", category: "lifestyle", model: "RainScreen-5.0", retailPrice: 659, salePrice: 529, isNew: false,
+              images: ["https://picsum.photos/id/4/600/600", "https://picsum.photos/id/4/600/600?t=1"],
+              sizes: ['39', '40', '41', '42', '43', '44'].map(size => ({size, inStock: true})),
+              colors: ["深灰", "军绿", "卡其", "炭黑"],
+              description: "搭载雨屏科技防水鞋面，无惧风雨，提供全天候干爽舒适的穿着体验。适合日常通勤和轻度户外活动，防滑橡胶大底，行走更稳健。",
+            },
+            {
+              id: 5, name: "361° 氮速3.0 训练鞋", category: "training", model: "NitroSpeed-3.0", retailPrice: 599, salePrice: 499, isNew: true,
+              images: ["https://picsum.photos/id/5/600/600", "https://picsum.photos/id/5/600/600?t=1"],
+              sizes: ['38', '39', '40', '41', '42', '43', '44'].map(size => ({size, inStock: Math.random() > 0.2})),
+              colors: ["炫彩黑", "能量黄", "活力粉", "静谧蓝"],
+              description: "专为综合训练设计，中底采用氮气缓震科技，提供出色的回弹和缓震。宽鞋楦设计，稳定性好，适合HIIT、力量训练等多种健身场景。",
+            },
+            {
+              id: 6, name: "361° 探路者 户外徒步鞋", category: "outdoor", model: "TrailBlazer", retailPrice: 899, salePrice: 759, isNew: false,
+              images: ["https://picsum.photos/id/6/600/600", "https://picsum.photos/id/6/600/600?t=1"],
+              sizes: ['39', '40', '41', '42', '43', '44', '45'].map(size => ({size, inStock: Math.random() > 0.1})),
+              colors: ["大地棕", "岩石灰", "森林绿", "天空蓝"],
+              description: "专业级徒步鞋，Vibram® 耐磨橡胶大底，提供卓越的抓地力和防滑性能。GORE-TEX® 防水透气内衬，全天候保护双脚。高帮设计，提供出色脚踝支撑。",
+            },
+            // 生成更多商品
+          ];
+
+          const names = ["飞燃", "CQT", "BIG3", "雨屏", "氮速", "探路者", "云舒", "锋速", "劲驰", "极光", "追风", "磐石", "轻羽", "劲风", "星耀"];
+          const categories = ['running', 'lifestyle', 'basketball', 'training', 'outdoor'];
+          const colors = ["经典黑", "纯净白", "深藏青", "亮橙色", "荧光绿", "炫彩紫", "玫瑰金", "薄荷绿", "天空蓝", "樱花粉", "岩灰", "酒红"];
+          const models = ["X-2024", "Pro", "Elite", "Max", "Lite", "Ultra", "Core", "Boost", "Flow", "Shield"];
+
+          let id = 7;
+          while (baseProducts.length < 50) {
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+            const randomModel = models[Math.floor(Math.random() * models.length)];
+            const basePrice = Math.floor(Math.random() * 400) + 300; // 300-700
+            const discount = Math.floor(Math.random() * 100) + 50;
+
+            baseProducts.push({
+              id: id++,
+              name: `361° ${randomName} ${Math.floor(Math.random() * 3) + 1}.${Math.floor(Math.random() * 2) + 0} ${randomCategory === 'running' ? '跑鞋' : randomCategory === 'basketball' ? '篮球鞋' : randomCategory === 'outdoor' ? '户外鞋' : randomCategory === 'training' ? '训练鞋' : '休闲鞋'}`,
+              category: randomCategory,
+              model: `${randomName}-${randomModel}`,
+              retailPrice: basePrice + discount,
+              salePrice: basePrice,
+              isNew: Math.random() > 0.7,
+              images: [
+                `https://picsum.photos/id/${Math.floor(Math.random() * 50) + 1}/600/600`,
+                `https://picsum.photos/id/${Math.floor(Math.random() * 50) + 1}/600/600?t=1`
+              ],
+              sizes: ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45'].map(size => ({
+                size,
+                inStock: Math.random() > 0.15
+              })),
+              colors: Array.from(new Set(colors.slice(0, Math.floor(Math.random() * 4) + 2))), // 随机2-5种颜色
+              description: `这是一款为${randomCategory === 'running' ? '跑步' : randomCategory === 'basketball' ? '篮球' : randomCategory === 'outdoor' ? '户外探索' : randomCategory === 'training' ? '综合训练' : '日常休闲'}设计的${randomCategory === 'lifestyle' ? '舒适' : '专业'}鞋款。采用${Math.random() > 0.5 ? '高弹' : '缓震'}中底科技和${Math.random() > 0.5 ? '透气' : '耐磨'}鞋面材料，提供${Math.random() > 0.5 ? '卓越的' : '出色的'}${randomCategory === 'running' ? '回弹与缓震' : randomCategory === 'basketball' ? '支撑与抓地' : randomCategory === 'outdoor' ? '防护与稳定性' : randomCategory === 'training' ? '灵活性与稳定性' : '舒适脚感'}。`
+            });
           }
-        ],
-        
+          return baseProducts;
+        })(),
         // Methods
         init() {
             setTimeout(() => {
@@ -356,7 +426,7 @@
           if (!this.searchTerm && this.activeCategory === 'all') return this.products;
           return this.products.filter(p => {
             const matchesCategory = this.activeCategory === 'all' || p.category === this.activeCategory;
-            const matchesSearch = this.searchTerm.trim() === '' || p.name.toLowerCase().includes(this.searchTerm.toLowerCase());
+            const matchesSearch = this.searchTerm.trim() === '' || p.name.toLowerCase().includes(this.searchTerm.toLowerCase()) || p.model.toLowerCase().includes(this.searchTerm.toLowerCase());
             return matchesCategory && matchesSearch;
           });
         },
@@ -385,10 +455,12 @@
                 this.showLoginModal = true; 
                 return; 
             }
-            
+            if (!this.selectedSize || !this.selectedColor) {
+                this.showToast('请选择尺码和颜色');
+                return;
+            }
             const cartId = `${this.selectedProduct.id}-${this.selectedSize}-${this.selectedColor}`;
             const existingItem = this.cart.find(item => item.cartId === cartId);
-
             if (existingItem) {
                 existingItem.quantity++;
             } else {
@@ -422,22 +494,29 @@
           return this.cart.reduce((total, item) => total + item.quantity, 0);
         },
         handleLogin() {
-          if (this.loginForm.email === 'user@example.com' && this.loginForm.password === 'password123') {
-            this.user = { id: 1, email: this.loginForm.email, name: '张三' };
+          // 简单的模拟登录
+          if (this.loginForm.email && this.loginForm.password) {
+            this.user = { id: 1, email: this.loginForm.email, name: this.loginForm.email.split('@')[0] };
             this.showLoginModal = false;
             this.loginForm = { email: '', password: '' };
             this.showToast(`欢迎回来, ${this.user.name}`);
-          } else { alert('邮箱或密码错误'); }
+          } else {
+            this.showToast('邮箱或密码错误');
+          }
         },
         handleRegister() {
           if (this.registerForm.password !== this.registerForm.confirmPassword) {
-            alert('两次输入的密码不匹配，请重新输入。');
+            this.showToast('两次输入的密码不匹配');
             return;
           }
-          this.user = { id: Date.now(), email: this.registerForm.email, name: this.registerForm.name };
-          this.showRegisterModal = false;
-          this.registerForm = { name: '', email: '', password: '', confirmPassword: '' };
-          this.showToast(`欢迎, ${this.user.name}! 您的账户已创建。`);
+          if (this.registerForm.name && this.registerForm.email && this.registerForm.password) {
+            this.user = { id: Date.now(), email: this.registerForm.email, name: this.registerForm.name };
+            this.showRegisterModal = false;
+            this.registerForm = { name: '', email: '', password: '', confirmPassword: '' };
+            this.showToast(`欢迎, ${this.user.name}! 您的账户已创建。`);
+          } else {
+            this.showToast('请填写完整信息');
+          }
         },
         logout() {
           this.showToast(`再见, ${this.user.name}`);
