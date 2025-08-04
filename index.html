@@ -123,7 +123,7 @@
                   <span class="text-lg font-bold text-red-600">¥<span x-text="product.salePrice"></span></span>
                   <span class="text-sm text-gray-500 line-through ml-2">¥<span x-text="product.retailPrice"></span></span>
                 </div>
-                <button @click="selectProduct(product.id)" class="w-full bg-gray-900 text-white py-2.5 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-semibold text-sm">选择选项</button>
+                <button @click="displayProductInModal(product)" class="w-full bg-gray-900 text-white py-2.5 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-semibold text-sm">选择选项</button>
               </div>
             </div>
           </template>
@@ -175,7 +175,6 @@
                     </template>
                   </div>
                 </div>
-                <p x-show="addToCartError" x-text="addToCartError" class="text-red-500 text-sm mt-2"></p>
                 <button @click="handleAddToCart()" :disabled="!selectedSize || !selectedColor" class="w-full mt-4 bg-gray-900 text-white py-3 rounded-lg font-semibold transition-colors duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-gray-700">加入购物车</button>
               </div>
             </div>
@@ -289,7 +288,6 @@
         modalImage: '',
         selectedSize: null,
         selectedColor: null,
-        addToCartError: '',
         showCart: false,
         showLoginModal: false,
         showRegisterModal: false,
@@ -347,17 +345,16 @@
             return matchesCategory && matchesSearch;
           });
         },
-        selectProduct(productId) {
-            this.selectedProduct = this.products.find(p => p.id === productId);
-            if (this.selectedProduct) {
-                this.modalImage = this.selectedProduct.images[0];
-            }
+        displayProductInModal(product) {
+            this.selectedProduct = product;
+            this.modalImage = product.images[0];
+            this.selectedSize = null;
+            this.selectedColor = null;
         },
         closeProductModal() {
             this.selectedProduct = null;
             this.selectedSize = null;
             this.selectedColor = null;
-            this.addToCartError = '';
         },
         toggleFavorite(productId) {
           if (!this.user) { this.showLoginModal = true; return; }
@@ -366,11 +363,10 @@
           else { this.favorites.push(productId); }
         },
         handleAddToCart() {
-            if (!this.selectedSize || !this.selectedColor) {
-                this.addToCartError = '请选择颜色和尺码。';
-                return;
+            if (!this.user) { 
+                this.showLoginModal = true; 
+                return; 
             }
-            if (!this.user) { this.showLoginModal = true; return; }
             
             const cartId = `${this.selectedProduct.id}-${this.selectedSize}-${this.selectedColor}`;
             const existingItem = this.cart.find(item => item.cartId === cartId);
