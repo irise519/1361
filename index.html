@@ -604,8 +604,8 @@
           return this.products.filter(product => {
             const matchesCategory = this.activeCategory === 'all' || product.category === this.activeCategory;
             const matchesSearch = product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                                 product.model.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                                 product.sku.toLowerCase().includes(this.searchTerm.toLowerCase());
+                                  product.model.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                                  product.sku.toLowerCase().includes(this.searchTerm.toLowerCase());
             return matchesCategory && matchesSearch;
           });
         },
@@ -710,7 +710,7 @@
         },
         
         handleGoogleLogin() {
-          this.user = { id: 999, email: 'google.user@gmail.com', name: 'Google 用户' };
+          this.user = { id: 999, email: 'google.user@gmail.com', name: 'Google 用户' };  
           this.showLoginModal = false;
         },
         
